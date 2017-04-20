@@ -205,12 +205,9 @@ module Audited
       end
 
       def write_audit(attrs)
-        audits_associated = audit_associated_with.is_a?(Array) ? audit_associated_with : [audit_associated_with]
-        audits_associated.each do |audit_associated|
-          attrs[:associated] = self.send(audit_associated) unless audit_associated.nil?
-          self.audit_comment = nil
-          run_callbacks(:audit)  { self.audits.create(attrs) } if auditing_enabled
-        end
+        attrs[:associated] = self.send(audit_associated_with) unless audit_associated_with.nil?
+        self.audit_comment = nil
+        run_callbacks(:audit)  { self.audits.create(attrs) } if auditing_enabled
       end
 
       def require_comment
